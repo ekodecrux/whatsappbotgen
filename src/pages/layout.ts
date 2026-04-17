@@ -59,7 +59,43 @@ export const sidebarNav = (active: string) => `
       <i class="fas fa-plug"></i><span>Integrations</span>
     </a>
 
+    <div class="nav-section">VERTICALS</div>
+    <a href="/smb-dashboard" class="nav-item ${active==='smb'?'active':''}">
+      <i class="fas fa-store"></i><span>Small Business</span>
+      <span class="nav-badge new">New</span>
+    </a>
+    <a href="/edu-dashboard" class="nav-item ${active==='edu'?'active':''}">
+      <i class="fas fa-graduation-cap"></i><span>Education Suite</span>
+    </a>
+    <a href="/corp-dashboard" class="nav-item ${active==='corp'?'active':''}">
+      <i class="fas fa-building"></i><span>Corporate Suite</span>
+    </a>
+
+    <div class="nav-section">ENTERPRISE</div>
+    <a href="/whitelabel-admin" class="nav-item ${active==='whitelabel'?'active':''}">
+      <i class="fas fa-layer-group"></i><span>White-Label Console</span>
+      <span class="nav-badge" style="background:var(--accent)">WL</span>
+    </a>
+    <a href="/erp-integrations" class="nav-item ${active==='erp'?'active':''}">
+      <i class="fas fa-database"></i><span>ERP Connect</span>
+    </a>
+    <a href="/delivery-engine" class="nav-item ${active==='delivery'?'active':''}">
+      <i class="fas fa-rocket"></i><span>Delivery Engine</span>
+    </a>
+    <a href="/notification-hub" class="nav-item ${active==='notifhub'?'active':''}">
+      <i class="fas fa-bell"></i><span>Notification Hub</span>
+    </a>
+    <a href="/compliance" class="nav-item ${active==='compliance'?'active':''}">
+      <i class="fas fa-shield-alt"></i><span>Compliance</span>
+    </a>
+
     <div class="nav-section">ACCOUNT</div>
+    <a href="/mini" class="nav-item ${active==='mini'?'active':''}">
+      <i class="fas fa-mobile-alt"></i><span>Mini Interface</span>
+    </a>
+    <a href="/recharge" class="nav-item ${active==='recharge'?'active':''}">
+      <i class="fas fa-coins"></i><span>Recharge Credits</span>
+    </a>
     <a href="/wallet" class="nav-item ${active==='wallet'?'active':''}">
       <i class="fas fa-wallet"></i><span>Wallet & Plans</span>
     </a>
