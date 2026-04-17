@@ -409,6 +409,151 @@ export const landingHTML = () => `
   </div>
 </section>
 
+<!-- VERTICALS SECTION -->
+<section style="padding:80px 5%;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(108,92,231,0.06) 0%,transparent 70%)">
+  <div style="text-align:center;margin-bottom:48px">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(108,92,231,0.1);border:1px solid rgba(108,92,231,0.3);color:#a29bfe;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px">
+      <i class="fas fa-sitemap"></i> Built for Every Industry
+    </div>
+    <h2 style="font-size:clamp(28px,4vw,42px);font-weight:900;color:white;margin-bottom:12px">One Platform, Every Vertical</h2>
+    <p style="font-size:16px;color:#64748b;max-width:560px;margin:0 auto">Schools, colleges, corporates, hospitals, and shops — all get their own tailored WhatsApp experience.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:1200px;margin:0 auto 48px">
+    ${[
+      {
+        icon:'graduation-cap',color:'#0984e3',bg:'rgba(9,132,227,0.08)',
+        title:'Education',sub:'Schools & Universities',
+        link:'/edu-dashboard',
+        features:['Fee & exam reminders','Parent communication','Attendance alerts','Result notifications','ERP integration (Zoho/SAP)','5,000+ students handled'],
+      },
+      {
+        icon:'building',color:'#6C5CE7',bg:'rgba(108,92,231,0.08)',
+        title:'Corporate',sub:'Enterprise & HR',
+        link:'/corp-dashboard',
+        features:['Payslip delivery via WhatsApp','Leave approval notifications','IT & maintenance alerts','Employee announcements','SAP/Oracle/Tally ERP sync','1,000+ employees, no spam'],
+      },
+      {
+        icon:'store',color:'#e17055',bg:'rgba(225,112,85,0.08)',
+        title:'Small Business',sub:'Shops, Clinics & Restaurants',
+        link:'/smb-dashboard',
+        features:['Order ready notifications','Appointment reminders','Promo & festive offers','Customer feedback bots','Simple mini interface','WhatsApp recharge on the go'],
+      },
+      {
+        icon:'heartbeat',color:'#e74c3c',bg:'rgba(231,76,60,0.08)',
+        title:'Healthcare',sub:'Hospitals & Clinics',
+        link:'/smb-dashboard',
+        features:['Appointment confirmations','Prescription ready alerts','Lab report notifications','Health tips broadcast','Doctor schedule updates','Bulk patient outreach'],
+      },
+    ].map(v=>`
+    <div style="border:1px solid ${v.color}33;border-radius:16px;padding:24px;background:${v.bg};transition:all 0.3s;cursor:pointer" onclick="window.location.href='${v.link}'" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px ${v.color}22'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div style="width:48px;height:48px;border-radius:13px;background:${v.color}22;display:flex;align-items:center;justify-content:center;font-size:22px;color:${v.color};margin-bottom:14px"><i class="fas fa-${v.icon}"></i></div>
+      <div style="font-size:18px;font-weight:800;color:white;margin-bottom:2px">${v.title}</div>
+      <div style="font-size:12px;color:${v.color};font-weight:600;margin-bottom:14px">${v.sub}</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+        ${v.features.map(f=>`<li style="display:flex;align-items:center;gap:8px;font-size:13px;color:#94a3b8"><i class="fas fa-check" style="color:${v.color};font-size:10px;flex-shrink:0"></i>${f}</li>`).join('')}
+      </ul>
+      <div style="margin-top:16px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:${v.color}">Explore Suite <i class="fas fa-arrow-right" style="font-size:11px"></i></div>
+    </div>`).join('')}
+  </div>
+
+  <!-- White-label CTA -->
+  <div style="max-width:900px;margin:0 auto;background:linear-gradient(135deg,rgba(108,92,231,0.15),rgba(0,206,201,0.08));border:1px solid rgba(108,92,231,0.25);border-radius:20px;padding:40px;text-align:center">
+    <div style="font-size:28px;font-weight:900;color:white;margin-bottom:10px">🏷️ White-label for Your Organization</div>
+    <p style="font-size:15px;color:#94a3b8;max-width:600px;margin:0 auto 24px;line-height:1.7">
+      Give your school, company, or business its own branded WhatsApp platform — custom logo, domain, and admin panel. Your team manages it. You control the branding.
+    </p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px">
+      ${[
+        ['Custom Logo & Colors','palette'],
+        ['Your Own Domain','globe'],
+        ['Individual Admin Login','users'],
+        ['Credit Allocation Control','coins'],
+        ['Feature Access Control','toggle-on'],
+        ['Multi-org Support','sitemap'],
+      ].map(([feat,ic])=>`
+      <div style="display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:600;color:#e2e8f0">
+        <i class="fas fa-${ic}" style="color:#a29bfe;font-size:11px"></i>${feat}
+      </div>`).join('')}
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="/whitelabel" style="background:linear-gradient(135deg,#6C5CE7,#00CEC9);color:white;padding:12px 28px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px"><i class="fas fa-paint-brush"></i> Setup White-label</a>
+      <a href="/register" style="background:transparent;border:1px solid rgba(255,255,255,0.2);color:white;padding:12px 28px;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px"><i class="fas fa-rocket"></i> Start Free Trial</a>
+    </div>
+  </div>
+</section>
+
+<!-- RECHARGE VIA WHATSAPP SECTION -->
+<section style="padding:60px 5%;background:linear-gradient(135deg,rgba(37,211,102,0.05),rgba(18,140,126,0.03))">
+  <div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25D366;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px">
+        <i class="fab fa-whatsapp"></i> Unique Feature
+      </div>
+      <h2 style="font-size:clamp(24px,3.5vw,38px);font-weight:900;color:white;margin-bottom:14px;line-height:1.2">Recharge Credits Directly on WhatsApp</h2>
+      <p style="font-size:15px;color:#64748b;line-height:1.7;margin-bottom:20px">
+        No app, no website needed. Just WhatsApp our billing bot, select a pack, pay via UPI — credits added instantly. Available 24/7 for all your team members.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+        ${[
+          ['Just WhatsApp the billing number','fab fa-whatsapp','#25D366'],
+          ['Select a credit pack by replying 1-4','fas fa-list-ol','#6C5CE7'],
+          ['Pay via UPI, Card or Net Banking','fas fa-lock','#0984e3'],
+          ['Credits added to your wallet instantly','fas fa-bolt','#fdcb6e'],
+        ].map(([step,ic,col])=>`
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#94a3b8">
+          <div style="width:32px;height:32px;border-radius:50%;background:${col}22;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <i class="${ic}" style="color:${col};font-size:13px"></i>
+          </div>
+          ${step}
+        </div>`).join('')}
+      </div>
+      <a href="/recharge" style="background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:12px 28px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px"><i class="fab fa-whatsapp"></i> Recharge Now</a>
+    </div>
+    <!-- Chat simulation -->
+    <div style="background:#0b141a;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+      <div style="background:#1f2c33;padding:14px 16px;display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;font-size:16px;color:white"><i class="fab fa-whatsapp"></i></div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#e9edef">WapiSend Billing</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4)">+91 88888 00001 • Business</div>
+        </div>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+        <div style="background:#1f2c33;color:#e9edef;border-radius:0 12px 12px 12px;padding:10px 14px;max-width:85%;font-size:12px;line-height:1.6">
+          👋 Hi Ravi! Your balance: <b style="color:#25D366">6,800 credits</b><br><br>
+          Choose a recharge pack:<br>
+          1️⃣ 10K credits — ₹1,000<br>
+          2️⃣ 50K credits — ₹4,000 ⭐<br>
+          3️⃣ 1L credits — ₹7,500<br>
+          4️⃣ Custom amount
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);text-align:right;margin-top:4px">10:30 AM ✓</div>
+        </div>
+        <div style="background:#005c4b;color:#e9edef;border-radius:12px 0 12px 12px;padding:10px 14px;max-width:60%;align-self:flex-end;font-size:12px">
+          2
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);text-align:right;margin-top:2px">10:31 AM ✓✓</div>
+        </div>
+        <div style="background:#1f2c33;color:#e9edef;border-radius:0 12px 12px 12px;padding:10px 14px;max-width:85%;font-size:12px;line-height:1.6">
+          ✅ <b>50,000 credits — ₹4,000</b><br><br>
+          Pay securely:<br>
+          🔗 <span style="color:#25D366">pay.wapi.app/ravi-oct24</span><br>
+          <span style="color:rgba(255,255,255,0.4);font-size:11px">Link valid for 30 minutes</span>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);text-align:right;margin-top:4px">10:31 AM ✓✓</div>
+        </div>
+        <div style="background:#005c4b;color:#e9edef;border-radius:12px 0 12px 12px;padding:10px 14px;max-width:70%;align-self:flex-end;font-size:12px">
+          Paid ✅
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);text-align:right;margin-top:2px">10:33 AM ✓✓</div>
+        </div>
+        <div style="background:#1f2c33;color:#e9edef;border-radius:0 12px 12px 12px;padding:10px 14px;max-width:85%;font-size:12px;line-height:1.6">
+          🎉 <b style="color:#25D366">50,000 credits added!</b><br>
+          New balance: <b>56,800 credits</b><br><br>
+          <span style="color:rgba(255,255,255,0.5);font-size:11px">Invoice: INV-2024-0089 emailed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">

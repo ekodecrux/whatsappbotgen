@@ -72,9 +72,8 @@ export const sidebarNav = (active: string) => `
     </a>
 
     <div class="nav-section">ENTERPRISE</div>
-    <a href="/whitelabel-admin" class="nav-item ${active==='whitelabel'?'active':''}">
-      <i class="fas fa-layer-group"></i><span>White-Label Console</span>
-      <span class="nav-badge" style="background:var(--accent)">WL</span>
+    <a href="/notification-hub" class="nav-item ${active==='notifhub'?'active':''}">
+      <i class="fas fa-bell"></i><span>Notification Hub</span>
     </a>
     <a href="/erp-integrations" class="nav-item ${active==='erp'?'active':''}">
       <i class="fas fa-database"></i><span>ERP Connect</span>
@@ -82,19 +81,26 @@ export const sidebarNav = (active: string) => `
     <a href="/delivery-engine" class="nav-item ${active==='delivery'?'active':''}">
       <i class="fas fa-rocket"></i><span>Delivery Engine</span>
     </a>
-    <a href="/notification-hub" class="nav-item ${active==='notifhub'?'active':''}">
-      <i class="fas fa-bell"></i><span>Notification Hub</span>
-    </a>
     <a href="/compliance" class="nav-item ${active==='compliance'?'active':''}">
       <i class="fas fa-shield-alt"></i><span>Compliance</span>
     </a>
 
-    <div class="nav-section">ACCOUNT</div>
+    <div class="nav-section">WHITE-LABEL</div>
+    <a href="/whitelabel" class="nav-item ${active==='whitelabel'?'active':''}">
+      <i class="fas fa-paint-brush"></i><span>Org Admin Panel</span>
+      <span class="nav-badge new">New</span>
+    </a>
+    <a href="/super-admin" class="nav-item ${active==='superadmin'?'active':''}">
+      <i class="fas fa-crown"></i><span>Super Admin</span>
+    </a>
     <a href="/mini" class="nav-item ${active==='mini'?'active':''}">
       <i class="fas fa-mobile-alt"></i><span>Mini Interface</span>
     </a>
+
+    <div class="nav-section">ACCOUNT</div>
     <a href="/recharge" class="nav-item ${active==='recharge'?'active':''}">
       <i class="fas fa-coins"></i><span>Recharge Credits</span>
+      <span class="nav-badge" style="background:var(--wa-green)">WA</span>
     </a>
     <a href="/wallet" class="nav-item ${active==='wallet'?'active':''}">
       <i class="fas fa-wallet"></i><span>Wallet & Plans</span>
