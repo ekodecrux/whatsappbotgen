@@ -12,10 +12,10 @@ export const sidebarNav = (active: string) => `
   </div>
 
   <div class="sidebar-profile">
-    <div class="profile-avatar">RS</div>
+    <div class="profile-avatar" id="profileAvatar">?</div>
     <div class="profile-info">
-      <span class="profile-name">Rahul Store</span>
-      <span class="profile-plan"><i class="fas fa-crown"></i> Pro Plan</span>
+      <span class="profile-name" id="profileName">Loading...</span>
+      <span class="profile-plan"><i class="fas fa-crown"></i> <span id="profilePlan">...</span></span>
     </div>
     <div class="wa-status online"></div>
   </div>
@@ -105,17 +105,21 @@ export const sidebarNav = (active: string) => `
     <a href="/wallet" class="nav-item ${active==='wallet'?'active':''}">
       <i class="fas fa-wallet"></i><span>Wallet & Plans</span>
     </a>
-    <a href="/landing" class="nav-item">
+    <a href="#" onclick="doLogout()" class="nav-item">
       <i class="fas fa-sign-out-alt"></i><span>Logout</span>
     </a>
   </nav>
 
   <div class="sidebar-footer">
+    <div style="font-size:10px;color:var(--wa-green);text-align:center;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:4px">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--wa-green);display:inline-block;animation:pulse 1.5s infinite"></span>
+      <span id="apiMode">Live Database</span>
+    </div>
     <div class="credit-display">
       <i class="fas fa-coins"></i>
       <div>
         <span class="credit-label">Credits</span>
-        <span class="credit-value">42,500</span>
+        <span class="credit-value" id="sidebarCredits">...</span>
       </div>
       <a href="/wallet" class="btn-topup">Top Up</a>
     </div>
@@ -146,7 +150,11 @@ export const topbar = (title: string, subtitle: string) => `
     <button class="icon-btn" title="Help">
       <i class="fas fa-question-circle"></i>
     </button>
-    <div class="topbar-avatar">RS</div>
+    <div class="topbar-avatar" id="topbarAvatar">?</div>
+  <div id="liveIndicator" style="display:none;align-items:center;gap:4px;font-size:10px;color:var(--wa-green);font-weight:700;padding:4px 8px;background:rgba(37,211,102,0.1);border-radius:6px;border:1px solid rgba(37,211,102,0.3)">
+    <span style="width:6px;height:6px;border-radius:50%;background:var(--wa-green);display:block;animation:pulse 1.5s infinite"></span>
+    LIVE
+  </div>
   </div>
 </header>
 `
@@ -550,6 +558,60 @@ function formatNum(n) {
   if (n >= 1000) return (n/1000).toFixed(1) + 'K';
   return n.toString();
 }
+
+// ── Global Auth & Live Indicator ──────────────────────────────────────────
+function getAuthHeaders() {
+  const token = localStorage.getItem('ws_token');
+  return token ? { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token } : { 'Content-Type': 'application/json' };
+}
+async function apiFetch(path, options) {
+  const opts = options || {};
+  opts.headers = Object.assign({}, getAuthHeaders(), opts.headers || {});
+  return fetch(path, opts);
+}
+function doLogout() {
+  localStorage.removeItem('ws_token');
+  localStorage.removeItem('ws_user');
+  window.location.href = '/login';
+}
+function loadUserProfile() {
+  const raw = localStorage.getItem('ws_user');
+  const user = raw ? JSON.parse(raw) : null;
+  if (user) {
+    const initials = (user.name || '?').split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+    document.getElementById('profileAvatar').textContent = initials;
+    document.getElementById('topbarAvatar').textContent = initials;
+    document.getElementById('profileName').textContent = user.name || user.email || 'User';
+  }
+}
+// Load live stats for sidebar
+async function loadSidebarLive() {
+  try {
+    const res = await apiFetch('/api/stats');
+    const d = await res.json();
+    if (d.creditsBalance !== undefined) document.getElementById('sidebarCredits').textContent = formatNum(d.creditsBalance);
+    if (d._source === 'live_db') {
+      document.getElementById('apiMode').textContent = 'Live Database';
+      const li = document.getElementById('liveIndicator');
+      if (li) li.style.display = 'flex';
+    }
+    if (d.plan) document.getElementById('profilePlan').textContent = d.plan + ' Plan';
+    // load plan from me
+  } catch(e) {}
+  apiFetch('/api/auth/me').then(r => r.json()).then(u => {
+    if (u && u.tenant) {
+      document.getElementById('profilePlan').textContent = u.tenant.plan + ' Plan';
+      document.getElementById('profileName').textContent = u.name || u.email;
+      const initials = (u.name || '?').split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+      document.getElementById('profileAvatar').textContent = initials;
+      document.getElementById('topbarAvatar').textContent = initials;
+    }
+  }).catch(() => {});
+}
+document.addEventListener('DOMContentLoaded', function() {
+  loadUserProfile();
+  loadSidebarLive();
+});
 `
 
 export const pageShell = (content: string, active: string, title: string, subtitle: string, extraCSS = '', extraJS = '') => `
@@ -564,6 +626,7 @@ export const pageShell = (content: string, active: string, title: string, subtit
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     ${globalCSS()}
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
     ${extraCSS}
   </style>
 </head>

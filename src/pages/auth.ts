@@ -101,11 +101,36 @@ function togglePwd() {
   if (i.type === 'password') { i.type = 'text'; e.className = 'fas fa-eye-slash'; }
   else { i.type = 'password'; e.className = 'fas fa-eye'; }
 }
-function handleLogin(e) {
+async function handleLogin(e) {
   e.preventDefault();
   const btn = e.target.querySelector('.btn-auth');
+  const email = e.target.querySelector('input[type="email"]').value;
+  const password = document.getElementById('pwdInput').value;
+  const errEl = document.getElementById('loginError');
+  if (errEl) errEl.remove();
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-  setTimeout(() => window.location.href = '/dashboard', 1500);
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+    const data = await res.json();
+    if (!res.ok || !data.token) {
+      btn.innerHTML = '<i class="fab fa-whatsapp"></i> Sign In to Dashboard';
+      btn.disabled = false;
+      const err = document.createElement('div');
+      err.id = 'loginError';
+      err.style.cssText = 'background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:10px 14px;font-size:13px;color:#ef4444;margin-bottom:14px;text-align:center';
+      err.textContent = data.error || 'Login failed. Try demo@wapisend.in / Admin@123';
+      e.target.insertBefore(err, e.target.firstChild);
+      return;
+    }
+    localStorage.setItem('ws_token', data.token);
+    localStorage.setItem('ws_user', JSON.stringify(data.user));
+    window.location.href = '/dashboard';
+  } catch(err) {
+    btn.innerHTML = '<i class="fab fa-whatsapp"></i> Sign In to Dashboard';
+    btn.disabled = false;
+    console.error(err);
+  }
 }
 </script>
 </body>
@@ -249,8 +274,33 @@ function selectPlan(el, plan) {
   document.querySelectorAll('.plan-opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
 }
-function handleRegister() {
-  setTimeout(() => window.location.href = '/dashboard', 1200);
+async function handleRegister() {
+  const name = document.getElementById('bizName')?.value || 'Demo User';
+  const email = document.getElementById('regEmail')?.value;
+  const phone = document.getElementById('regPhone')?.value || '';
+  const pwd = document.querySelector('#step1 input[type="password"]')?.value || 'Welcome@123';
+  const selectedPlan = document.querySelector('.plan-opt.selected .plan-opt-name')?.textContent || 'Growth';
+  if (!email) { alert('Please enter your email address'); return; }
+  const btn = document.querySelector('#step3 .btn-auth');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Setting up...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name, email, password: pwd, orgName: name, plan: selectedPlan.toLowerCase() }) });
+    const data = await res.json();
+    if (!res.ok || !data.token) {
+      btn.innerHTML = '<i class="fas fa-rocket"></i> Launch My Dashboard';
+      btn.disabled = false;
+      alert(data.error || 'Registration failed');
+      return;
+    }
+    localStorage.setItem('ws_token', data.token);
+    localStorage.setItem('ws_user', JSON.stringify(data.user));
+    window.location.href = '/dashboard';
+  } catch(err) {
+    btn.innerHTML = '<i class="fas fa-rocket"></i> Launch My Dashboard';
+    btn.disabled = false;
+    console.error(err);
+  }
 }
 </script>
 </body>
