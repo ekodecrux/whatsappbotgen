@@ -13,19 +13,32 @@ export const rechargeHTML = () => pageShell(`
         <div style="font-size:22px;font-weight:800;color:white">Recharge & Wallet</div>
         <div style="font-size:13px;color:rgba(255,255,255,0.75)">Top up credits — use for WhatsApp messages across all campaigns</div>
       </div>
+      <div style="margin-left:auto;background:rgba(255,255,255,0.15);border-radius:10px;padding:6px 14px;font-size:11px;font-weight:700;color:white;display:flex;align-items:center;gap:6px">
+        <span style="width:7px;height:7px;border-radius:50%;background:#fff;display:inline-block;animation:pulse 1.5s infinite"></span>
+        Razorpay LIVE
+      </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
-      ${[
-        ['Current Balance','42,500 credits','coins','rgba(255,255,255,0.2)'],
-        ['≈ Messages Left','42,500 msgs','paper-plane','rgba(255,255,255,0.2)'],
-        ['Monthly Used','84,320 credits','chart-bar','rgba(255,255,255,0.2)'],
-        ['Monthly Recharges','₹12,400','receipt','rgba(255,255,255,0.2)'],
-      ].map(([label,val,ic,bg])=>`
-      <div style="background:${bg};border-radius:12px;padding:14px">
-        <i class="fas fa-${ic}" style="color:rgba(255,255,255,0.7);font-size:18px;margin-bottom:8px;display:block"></i>
-        <div style="font-size:18px;font-weight:800;color:white">${val}</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.65)">${label}</div>
-      </div>`).join('')}
+      <div style="background:rgba(255,255,255,0.2);border-radius:12px;padding:14px">
+        <i class="fas fa-coins" style="color:rgba(255,255,255,0.7);font-size:18px;margin-bottom:8px;display:block"></i>
+        <div style="font-size:18px;font-weight:800;color:white" id="heroCredits">—</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.65)">Current Balance</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.2);border-radius:12px;padding:14px">
+        <i class="fas fa-paper-plane" style="color:rgba(255,255,255,0.7);font-size:18px;margin-bottom:8px;display:block"></i>
+        <div style="font-size:18px;font-weight:800;color:white" id="heroMsgs">—</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.65)">≈ Messages Left</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.2);border-radius:12px;padding:14px">
+        <i class="fas fa-chart-bar" style="color:rgba(255,255,255,0.7);font-size:18px;margin-bottom:8px;display:block"></i>
+        <div style="font-size:18px;font-weight:800;color:white" id="heroMsgSent">—</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.65)">Messages Sent</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.2);border-radius:12px;padding:14px">
+        <i class="fas fa-receipt" style="color:rgba(255,255,255,0.7);font-size:18px;margin-bottom:8px;display:block"></i>
+        <div style="font-size:18px;font-weight:800;color:white" id="heroTxns">—</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.65)">Total Recharges</div>
+      </div>
     </div>
   </div>
 </div>
@@ -33,7 +46,7 @@ export const rechargeHTML = () => pageShell(`
 <!-- Main Recharge Grid -->
 <div style="display:grid;grid-template-columns:1fr 380px;gap:20px;margin-bottom:24px">
 
-  <!-- Left: Packs + Custom -->
+  <!-- Left: Packs + WhatsApp -->
   <div style="display:flex;flex-direction:column;gap:16px">
 
     <!-- Credit Packs -->
@@ -43,38 +56,10 @@ export const rechargeHTML = () => pageShell(`
         <span style="font-size:11px;color:var(--text-muted)">1 Credit = ₹0.10 = 1 WhatsApp message</span>
       </div>
       <div class="card-body">
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
-          ${[
-            {credits:'10K',price:'₹1,000',per:'₹0.10/msg',save:'',popular:false,color:'var(--info)'},
-            {credits:'25K',price:'₹2,250',per:'₹0.09/msg',save:'Save 10%',popular:false,color:'var(--wa-green)'},
-            {credits:'50K',price:'₹4,000',per:'₹0.08/msg',save:'Save 20% ⭐',popular:true,color:'var(--wa-green)'},
-            {credits:'1L',price:'₹7,500',per:'₹0.075/msg',save:'Save 25%',popular:false,color:'var(--primary)'},
-            {credits:'2.5L',price:'₹17,500',per:'₹0.07/msg',save:'Save 30%',popular:false,color:'var(--primary)'},
-            {credits:'5L',price:'₹30,000',per:'₹0.06/msg',save:'Save 40% 🏆',popular:false,color:'#e17055'},
-          ].map(pack=>`
-          <div class="pack-card ${pack.popular?'active':''}" onclick="selectPack(this,'${pack.credits}','${pack.price}')" style="border:2px solid ${pack.popular?'var(--wa-green)':'var(--border)'};border-radius:14px;padding:18px;cursor:pointer;transition:all 0.25s;background:${pack.popular?'rgba(37,211,102,0.06)':'transparent'};text-align:center;position:relative">
-            ${pack.popular?'<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--wa-green);color:white;font-size:9px;font-weight:800;padding:3px 10px;border-radius:8px;white-space:nowrap;letter-spacing:0.5px">MOST POPULAR</div>':''}
-            ${pack.save?`<div style="font-size:10px;font-weight:700;color:${pack.color};margin-bottom:6px">${pack.save}</div>`:' <div style="height:16px"></div>'}
-            <div style="font-size:26px;font-weight:900;color:${pack.popular?'var(--wa-green)':'white'}">${pack.credits}</div>
-            <div style="font-size:11px;color:var(--text-muted);margin:2px 0">Credits</div>
-            <div style="font-size:20px;font-weight:800;color:white;margin:8px 0">${pack.price}</div>
-            <div style="font-size:11px;color:var(--text-muted)">${pack.per}</div>
-          </div>`).join('')}
-        </div>
-
-        <!-- Custom amount -->
-        <div style="border:1px solid var(--border);border-radius:12px;padding:16px;background:rgba(255,255,255,0.02)">
-          <div style="font-size:13px;font-weight:700;color:white;margin-bottom:12px"><i class="fas fa-sliders-h" style="color:var(--primary)"></i> Custom Amount</div>
-          <div style="display:flex;gap:10px;align-items:center">
-            <div style="position:relative;flex:1">
-              <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:14px">₹</span>
-              <input type="number" class="form-control" id="customAmount" placeholder="Enter amount (min ₹500)" style="padding-left:28px" oninput="calcCustomCredits()">
-            </div>
-            <div style="text-align:center;min-width:100px">
-              <div style="font-size:11px;color:var(--text-muted)">You get</div>
-              <div style="font-size:18px;font-weight:800;color:var(--wa-green)" id="customCreditsOut">—</div>
-              <div style="font-size:10px;color:var(--text-muted)">credits</div>
-            </div>
+        <div id="packsGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
+          <div style="text-align:center;padding:40px;color:var(--text-muted);grid-column:1/-1">
+            <i class="fas fa-spinner fa-spin" style="font-size:24px;margin-bottom:8px;display:block"></i>
+            Loading packs...
           </div>
         </div>
       </div>
@@ -96,8 +81,8 @@ export const rechargeHTML = () => pageShell(`
               ${[
                 ['Send "BALANCE" to check credits','1'],
                 ['Reply with pack number','2'],
-                ['Pay via secure link','3'],
-                ['Credits added instantly','4'],
+                ['Pay via secure Razorpay link','3'],
+                ['Credits added instantly to DB','4'],
               ].map(([step,num])=>`
               <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-muted)">
                 <div style="width:22px;height:22px;border-radius:50%;background:rgba(37,211,102,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--wa-green);flex-shrink:0">${num}</div>
@@ -119,12 +104,12 @@ export const rechargeHTML = () => pageShell(`
               <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--wa-green),var(--wa-teal));display:flex;align-items:center;justify-content:center;font-size:13px;color:white"><i class="fab fa-whatsapp"></i></div>
               <div>
                 <div style="font-size:12px;font-weight:600;color:#e9edef">WapiSend Billing</div>
-                <div style="font-size:10px;color:rgba(255,255,255,0.4)">Business Account</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.4)">Business Account · Razorpay Powered</div>
               </div>
             </div>
             <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
               <div style="background:#1f2c33;color:#e9edef;border-radius:0 12px 12px 12px;padding:8px 12px;max-width:85%;font-size:11px;line-height:1.5">
-                👋 Hi Rahul! Balance: <b>42,500 credits</b><br><br>
+                👋 Hi! Current balance: <b id="waBotBalance">loading...</b><br><br>
                 Recharge packs:<br>
                 1️⃣ 10K — ₹1,000<br>
                 2️⃣ 50K — ₹4,000 ⭐<br>
@@ -136,9 +121,9 @@ export const rechargeHTML = () => pageShell(`
               </div>
               <div style="background:#1f2c33;color:#e9edef;border-radius:0 12px 12px 12px;padding:8px 12px;max-width:85%;font-size:11px;line-height:1.5">
                 ✅ 50K credits — ₹4,000<br>
-                Pay securely:<br>
-                🔗 pay.wapi.app/rahul-oct<br>
-                <span style="color:rgba(255,255,255,0.4)">Link valid 30 mins</span>
+                🔐 Pay via Razorpay:<br>
+                🔗 pay.wapi.app/secure-link<br>
+                <span style="color:rgba(255,255,255,0.4)">Link valid 30 mins • UPI/Card/NetBanking</span>
               </div>
             </div>
           </div>
@@ -151,7 +136,7 @@ export const rechargeHTML = () => pageShell(`
       <div class="card-header">
         <div class="card-title"><i class="fas fa-sync-alt" style="color:var(--accent)"></i> Auto-Recharge Settings</div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:12px;color:var(--text-muted)">Enabled</span>
+          <span style="font-size:12px;color:var(--text-muted)" id="autoRechargeLbl">Enabled</span>
           <div class="toggle-switch on" id="autoRechargeToggle" onclick="toggleAutoRecharge()" style="width:44px;height:24px;border-radius:12px;background:var(--wa-green);cursor:pointer;position:relative;transition:all 0.3s">
             <div style="width:20px;height:20px;border-radius:50%;background:white;position:absolute;top:2px;right:2px;transition:all 0.3s;box-shadow:0 2px 4px rgba(0,0,0,0.3)"></div>
           </div>
@@ -179,25 +164,26 @@ export const rechargeHTML = () => pageShell(`
             <label class="form-label">Payment Method</label>
             <select class="form-control">
               <option>Saved UPI (GPay)</option>
-              <option>Card ending 4242</option>
+              <option>Card</option>
               <option>Net Banking</option>
             </select>
           </div>
         </div>
         <div style="margin-top:12px;padding:10px 12px;background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.15);border-radius:10px;font-size:12px;color:var(--text-muted)">
-          <i class="fas fa-info-circle" style="color:var(--wa-green)"></i> Auto-recharge will trigger when credits drop below threshold. You'll get WhatsApp notification before each charge.
+          <i class="fas fa-info-circle" style="color:var(--wa-green)"></i> Auto-recharge triggers when credits drop below threshold. You'll get WhatsApp notification before each charge.
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Right: Payment + Summary -->
+  <!-- Right: Order Summary + Payment -->
   <div style="display:flex;flex-direction:column;gap:16px">
 
-    <!-- Order Summary -->
     <div class="card" style="position:sticky;top:80px">
       <div class="card-header">
         <div class="card-title"><i class="fas fa-shopping-cart" style="color:var(--primary)"></i> Order Summary</div>
+        <!-- Razorpay badge -->
+        <img src="https://razorpay.com/assets/razorpay-glyph.svg" style="height:20px;opacity:0.8" onerror="this.style.display='none'">
       </div>
       <div class="card-body">
         <div id="orderSummary">
@@ -207,78 +193,59 @@ export const rechargeHTML = () => pageShell(`
           </div>
         </div>
 
-        <!-- Payment Methods -->
         <div id="paymentSection" style="display:none">
-          <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">Payment Method</div>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
-            ${[
-              ['upi','UPI / QR Code','GPay, PhonePe, BHIM, Paytm','fab fa-google-pay','rgba(37,211,102,0.1)','var(--wa-green)',true],
-              ['card','Credit / Debit Card','Visa, Mastercard, Rupay','fas fa-credit-card','rgba(9,132,227,0.1)','var(--info)',false],
-              ['netbanking','Net Banking','All major Indian banks','fas fa-university','rgba(108,92,231,0.1)','var(--primary)',false],
-              ['emi','EMI (No Cost)','Available on 3/6/12 months','fas fa-calendar-alt','rgba(231,76,60,0.1)','var(--danger)',false],
-            ].map(([id,name,sub,ic,bg,col,sel])=>`
-            <div class="pay-opt ${sel?'selected':''}" onclick="selectPayMethod(this,'${id}')" style="border:2px solid ${sel?col:'var(--border)'};border-radius:10px;padding:10px 12px;cursor:pointer;transition:all 0.2s;background:${sel?bg:'transparent'};display:flex;align-items:center;gap:10px">
-              <div style="width:34px;height:34px;border-radius:8px;background:${bg};display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <i class="${ic}" style="color:${col};font-size:14px"></i>
-              </div>
-              <div style="flex:1">
-                <div style="font-size:12px;font-weight:700;color:white">${name}</div>
-                <div style="font-size:10px;color:var(--text-muted)">${sub}</div>
-              </div>
-              <div class="pay-radio-dot" style="width:16px;height:16px;border-radius:50%;border:2px solid ${sel?col:'var(--border)'};display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                ${sel?`<div style="width:8px;height:8px;border-radius:50%;background:${col}"></div>`:''}
-              </div>
-            </div>`).join('')}
-          </div>
-
-          <!-- GST info -->
           <div style="font-size:11px;color:var(--text-muted);padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;margin-bottom:14px">
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Subtotal</span><span id="subtotalAmt">₹4,000</span></div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>GST (18%)</span><span id="gstAmt">₹720</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Subtotal</span><span id="subtotalAmt">—</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>GST (18%)</span><span id="gstAmt">—</span></div>
             <div style="border-top:1px solid var(--border);margin:6px 0"></div>
-            <div style="display:flex;justify-content:space-between;font-weight:700;color:white;font-size:13px"><span>Total</span><span id="totalAmt">₹4,720</span></div>
+            <div style="display:flex;justify-content:space-between;font-weight:700;color:white;font-size:13px"><span>Total Payable</span><span id="totalAmt">—</span></div>
           </div>
 
-          <button class="btn btn-success w-full" style="justify-content:center;font-size:14px;padding:13px" onclick="processPayment()">
-            <i class="fas fa-lock"></i> Pay Securely & Recharge
+          <!-- What you get -->
+          <div style="background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.15);border-radius:10px;padding:12px;margin-bottom:14px">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">You will receive</div>
+            <div style="font-size:22px;font-weight:900;color:var(--wa-green)" id="youGet">—</div>
+            <div style="font-size:11px;color:var(--text-muted)">credits → <span id="youGetMsgs">—</span> WhatsApp messages</div>
+          </div>
+
+          <button class="btn btn-success w-full" id="payBtn" style="justify-content:center;font-size:14px;padding:13px" onclick="initRazorpay()">
+            <i class="fas fa-lock"></i> Pay Securely via Razorpay
           </button>
           <div style="text-align:center;font-size:10px;color:var(--text-muted);margin-top:8px">
-            <i class="fas fa-shield-alt" style="color:var(--wa-green)"></i> 256-bit SSL encrypted • PCI-DSS compliant
+            <i class="fas fa-shield-alt" style="color:var(--wa-green)"></i> 256-bit SSL • Razorpay PCI-DSS
+          </div>
+          <div style="display:flex;justify-content:center;gap:12px;margin-top:10px;opacity:0.6">
+            ${['upi','visa','mastercard','rupay'].map(m=>`<img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/${m}.svg" style="height:16px;filter:invert(1)" onerror="this.style.display='none'">`).join('')}
+            <span style="font-size:10px;color:var(--text-muted);line-height:16px">UPI · Card · NetBanking · Wallets</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Referral bonus -->
-    <div class="card" style="background:linear-gradient(135deg,rgba(253,203,110,0.1),rgba(225,112,85,0.06));border-color:rgba(253,203,110,0.2)">
-      <div class="card-body">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <div style="font-size:28px">🎁</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:white">Referral Bonus</div>
-            <div style="font-size:11px;color:var(--text-muted)">Refer a business, earn 5% of their first recharge</div>
-          </div>
+    <!-- Success card (hidden) -->
+    <div id="successCard" style="display:none" class="card" style="background:linear-gradient(135deg,rgba(37,211,102,0.1),rgba(18,140,126,0.05));border-color:rgba(37,211,102,0.3)">
+      <div class="card-body" style="text-align:center;padding:24px">
+        <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--wa-green),var(--wa-teal));display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;color:white">
+          <i class="fas fa-check"></i>
         </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input type="text" class="form-control" value="WAPI-RAHUL-24" readonly style="font-size:13px;font-weight:700;letter-spacing:1px">
-          <button class="btn btn-sm btn-outline" onclick="copyText('WAPI-RAHUL-24')"><i class="fas fa-copy"></i></button>
-        </div>
+        <div style="font-size:16px;font-weight:800;color:white;margin-bottom:6px">Payment Successful!</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px" id="successMsg">Credits added to your wallet.</div>
+        <div style="font-size:24px;font-weight:900;color:var(--wa-green);margin-bottom:4px" id="newBalance">—</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:16px">New Credit Balance</div>
+        <a href="/dashboard" class="btn btn-success" style="justify-content:center"><i class="fas fa-th-large"></i> Go to Dashboard</a>
       </div>
     </div>
+
   </div>
 </div>
 
-<!-- Transaction History -->
+<!-- Transaction History (Real from DB) -->
 <div class="card">
   <div class="card-header">
     <div class="card-title"><i class="fas fa-receipt" style="color:var(--accent)"></i> Transaction History</div>
-    <div style="display:flex;gap:8px">
-      <select class="form-control" style="width:130px;padding:6px 10px;font-size:12px">
-        <option>All Types</option>
-        <option>Recharge</option>
-        <option>Debit</option>
-      </select>
-      <button class="btn btn-sm btn-outline" onclick="showToast('Downloading statement...','info')"><i class="fas fa-download"></i> Export</button>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span style="font-size:11px;color:var(--wa-green);font-weight:600"><i class="fas fa-circle" style="font-size:8px"></i> Live from DB</span>
+      <button class="btn btn-sm btn-outline" onclick="exportTxns()"><i class="fas fa-download"></i> Export CSV</button>
     </div>
   </div>
   <div style="overflow-x:auto">
@@ -286,105 +253,298 @@ export const rechargeHTML = () => pageShell(`
       <thead>
         <tr><th>Date</th><th>Description</th><th>Type</th><th>Credits</th><th>Amount</th><th>Method</th><th>Status</th><th>Invoice</th></tr>
       </thead>
-      <tbody>
-        ${[
-          ['Oct 23, 2024','Recharge Pack 50K','Recharge','+50,000','₹4,720','GPay UPI','success','INV-2024-0089'],
-          ['Oct 22, 2024','Diwali Campaign Send','Debit','-342','₹34.20','Auto Debit','success','—'],
-          ['Oct 21, 2024','Bot Messages - Welcome','Debit','-892','₹89.20','Auto Debit','success','—'],
-          ['Oct 20, 2024','Recharge Pack 10K','Recharge','+10,000','₹1,180','HDFC NetBanking','success','INV-2024-0081'],
-          ['Oct 18, 2024','Bulk Campaign - Flash Sale','Debit','-4,500','₹450','Auto Debit','success','—'],
-          ['Oct 15, 2024','Recharge Pack 1L','Recharge','+1,00,000','₹8,850','Card 4242','success','INV-2024-0074'],
-          ['Oct 12, 2024','Auto-Recharge Triggered','Recharge','+50,000','₹4,720','GPay UPI','success','INV-2024-0068'],
-          ['Oct 10, 2024','WhatsApp Recharge 50K','Recharge','+50,000','₹4,000','UPI via Chat','success','INV-2024-0062'],
-        ].map(([date,desc,type,credits,amt,method,status,inv])=>`
-        <tr>
-          <td style="font-size:12px;color:var(--text-muted);white-space:nowrap">${date}</td>
-          <td style="font-size:13px;font-weight:600;color:white">${desc}</td>
-          <td><span class="badge ${type==='Recharge'?'badge-success':'badge-warning'}" style="font-size:10px">${type}</span></td>
-          <td style="font-size:13px;font-weight:700;color:${credits.startsWith('+')?'var(--wa-green)':'var(--danger)'}">${credits}</td>
-          <td style="font-size:13px;font-weight:600;color:white">${amt}</td>
-          <td style="font-size:12px;color:var(--text-muted)">${method}</td>
-          <td><span class="badge badge-success" style="font-size:10px">${status}</span></td>
-          <td>
-            ${inv!=='—'?`<button class="btn btn-xs btn-outline" onclick="showToast('Downloading ${inv}','success')"><i class="fas fa-file-pdf"></i> ${inv}</button>`:'<span style="color:var(--text-muted);font-size:12px">—</span>'}
-          </td>
-        </tr>`).join('')}
+      <tbody id="txnBody">
+        <tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text-muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-`, 'recharge', 'Recharge & Wallet', 'Buy credits to power your WhatsApp messaging', `.w-full{width:100%}`, `
-let selectedPack = null;
-const packs = {
-  '10K': {credits:'10,000',price:'₹1,000',priceNum:1000,gst:180},
-  '25K': {credits:'25,000',price:'₹2,250',priceNum:2250,gst:405},
-  '50K': {credits:'50,000',price:'₹4,000',priceNum:4000,gst:720},
-  '1L': {credits:'1,00,000',price:'₹7,500',priceNum:7500,gst:1350},
-  '2.5L': {credits:'2,50,000',price:'₹17,500',priceNum:17500,gst:3150},
-  '5L': {credits:'5,00,000',price:'₹30,000',priceNum:30000,gst:5400},
+`, 'recharge', 'Recharge & Wallet', 'Buy credits — powered by Razorpay', `.w-full{width:100%}`, `
+// ── State ───────────────────────────────────────────────────────────────
+let selectedPackId = null;
+let selectedPackData = null;
+let rzpKey = 'rzp_test_S0det8rxQtxeZ3'; // test key — server sends live key at runtime
+
+const PACK_MAP = {
+  1: {label:'10K', credits:10000, price:1000},
+  2: {label:'25K', credits:25000, price:2250},
+  3: {label:'50K', credits:50000, price:4000},
+  4: {label:'1L',  credits:100000, price:7500},
+  5: {label:'2.5L',credits:250000, price:17500},
+  6: {label:'5L',  credits:500000, price:30000},
 };
-function selectPack(el, credits, price) {
+
+// ── Load live stats ─────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const d = await (await apiFetch('/api/stats')).json();
+    const creds = d.creditsBalance || 0;
+    const sent = d.messagesSent || 0;
+    document.getElementById('heroCredits').textContent = creds.toLocaleString('en-IN') + ' credits';
+    document.getElementById('heroMsgs').textContent = creds.toLocaleString('en-IN') + ' msgs';
+    document.getElementById('heroMsgSent').textContent = formatNum(sent);
+    const waBal = document.getElementById('waBotBalance');
+    if (waBal) waBal.textContent = creds.toLocaleString('en-IN') + ' credits';
+  } catch(e) {}
+}
+
+// ── Load packs ──────────────────────────────────────────────────────────
+async function loadPacks() {
+  try {
+    const packs = await (await apiFetch('/api/credit-packs')).json();
+    const txns = await (await apiFetch('/api/transactions')).json();
+    const rechargeCount = (txns||[]).filter(t=>t.type==='recharge').length;
+    const rechargeTotal = (txns||[]).filter(t=>t.type==='recharge').reduce((a,t)=>a+Math.abs(t.amount||0),0);
+    document.getElementById('heroTxns').textContent = rechargeCount + ' (₹' + rechargeTotal.toLocaleString('en-IN') + ')';
+
+    const colors = ['var(--info)','var(--wa-green)','var(--wa-green)','var(--primary)','var(--primary)','#e17055'];
+    document.getElementById('packsGrid').innerHTML = packs.map(p => \`
+      <div class="pack-card \${p.popular?'active':''}" 
+           onclick="selectPack(this,\${p.id})"
+           style="border:2px solid \${p.popular?'var(--wa-green)':'var(--border)'};border-radius:14px;padding:18px;cursor:pointer;transition:all 0.25s;background:\${p.popular?'rgba(37,211,102,0.06)':'transparent'};text-align:center;position:relative">
+        \${p.popular?'<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--wa-green);color:white;font-size:9px;font-weight:800;padding:3px 10px;border-radius:8px;white-space:nowrap;letter-spacing:0.5px">MOST POPULAR</div>':''}
+        \${p.savings?'<div style="font-size:10px;font-weight:700;color:'+colors[(p.id-1)%colors.length]+';margin-bottom:6px">'+p.savings+'</div>':'<div style="height:16px"></div>'}
+        <div style="font-size:26px;font-weight:900;color:\${p.popular?'var(--wa-green)':'white'}">\${p.label}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin:2px 0">Credits</div>
+        <div style="font-size:20px;font-weight:800;color:white;margin:8px 0">₹\${p.price.toLocaleString('en-IN')}</div>
+        <div style="font-size:11px;color:var(--text-muted)">₹\${p.pricePerCredit.toFixed(3)}/msg</div>
+      </div>
+    \`).join('');
+  } catch(e) {
+    document.getElementById('packsGrid').innerHTML = '<div style="color:var(--danger);padding:20px;text-align:center;grid-column:1/-1">Failed to load packs</div>';
+  }
+}
+
+// ── Select Pack ──────────────────────────────────────────────────────────
+function selectPack(el, packId) {
   document.querySelectorAll('.pack-card').forEach(p => {
     p.style.borderColor = 'var(--border)';
     p.style.background = 'transparent';
-    p.classList.remove('active');
   });
   el.style.borderColor = 'var(--wa-green)';
   el.style.background = 'rgba(37,211,102,0.06)';
-  el.classList.add('active');
-  selectedPack = packs[credits];
-  if (!selectedPack) return;
-  const total = selectedPack.priceNum + selectedPack.gst;
+  selectedPackId = packId;
+  selectedPackData = PACK_MAP[packId];
+  if (!selectedPackData) return;
+
+  const gst = Math.round(selectedPackData.price * 0.18);
+  const total = selectedPackData.price + gst;
+
   document.getElementById('orderSummary').innerHTML = \`
     <div style="padding:14px;background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.15);border-radius:10px;margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <div>
-          <div style="font-size:13px;font-weight:700;color:white">\${credits} Credits Pack</div>
-          <div style="font-size:11px;color:var(--text-muted)">Approx \${credits} WhatsApp messages</div>
+          <div style="font-size:13px;font-weight:700;color:white">\${selectedPackData.label} Credits Pack</div>
+          <div style="font-size:11px;color:var(--text-muted)">\${selectedPackData.credits.toLocaleString('en-IN')} WhatsApp messages</div>
         </div>
-        <div style="font-size:20px;font-weight:800;color:var(--wa-green)">\${selectedPack.price}</div>
+        <div style="font-size:20px;font-weight:800;color:var(--wa-green)">₹\${selectedPackData.price.toLocaleString('en-IN')}</div>
       </div>
     </div>
   \`;
-  document.getElementById('subtotalAmt').textContent = selectedPack.price;
-  document.getElementById('gstAmt').textContent = '₹' + selectedPack.gst;
+  document.getElementById('subtotalAmt').textContent = '₹' + selectedPackData.price.toLocaleString('en-IN');
+  document.getElementById('gstAmt').textContent = '₹' + gst.toLocaleString('en-IN');
   document.getElementById('totalAmt').textContent = '₹' + total.toLocaleString('en-IN');
+  document.getElementById('youGet').textContent = selectedPackData.credits.toLocaleString('en-IN');
+  document.getElementById('youGetMsgs').textContent = selectedPackData.credits.toLocaleString('en-IN');
   document.getElementById('paymentSection').style.display = 'block';
 }
-function selectPayMethod(el, id) {
-  document.querySelectorAll('.pay-opt').forEach(p => {
-    p.style.borderColor = 'var(--border)';
-    p.style.background = 'transparent';
-    p.querySelector('.pay-radio-dot').innerHTML = '';
-    p.querySelector('.pay-radio-dot').style.borderColor = 'var(--border)';
+
+// ── Initiate Razorpay Payment ─────────────────────────────────────────────
+async function initRazorpay() {
+  if (!selectedPackId) { showToast('Please select a pack first', 'error'); return; }
+  const btn = document.getElementById('payBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating order...';
+  btn.disabled = true;
+
+  try {
+    // Create Razorpay order on server
+    const res = await apiFetch('/api/recharge/create-order', {
+      method: 'POST',
+      body: JSON.stringify({ packId: selectedPackId })
+    });
+    const order = await res.json();
+
+    if (order.mode === 'demo') {
+      // No real Razorpay configured — use demo flow
+      await completeDemoPayment(order);
+      return;
+    }
+
+    // Real Razorpay Checkout
+    const options = {
+      key: order.key,
+      amount: order.amount,
+      currency: order.currency || 'INR',
+      name: 'WapiSend Technologies',
+      description: selectedPackData.label + ' Credit Pack',
+      image: 'https://via.placeholder.com/48x48/25D366/ffffff?text=W',
+      order_id: order.orderId,
+      prefill: {
+        name: (localStorage.getItem('ws_user') ? JSON.parse(localStorage.getItem('ws_user')).name : '') || 'WapiSend User',
+        email: (localStorage.getItem('ws_user') ? JSON.parse(localStorage.getItem('ws_user')).email : '') || '',
+        contact: ''
+      },
+      theme: { color: '#25D366' },
+      handler: async function(response) {
+        // Payment successful — verify on server
+        await verifyPayment(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature);
+      },
+      modal: {
+        ondismiss: function() {
+          btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely via Razorpay';
+          btn.disabled = false;
+          showToast('Payment cancelled', 'error');
+        }
+      }
+    };
+
+    if (typeof Razorpay === 'undefined') {
+      showToast('Razorpay SDK loading...', 'info');
+      btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely via Razorpay';
+      btn.disabled = false;
+      return;
+    }
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+
+  } catch(e) {
+    console.error('Razorpay error:', e);
+    showToast('Payment gateway error: ' + e.message, 'error');
+    btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely via Razorpay';
+    btn.disabled = false;
+  }
+}
+
+// ── Verify Payment with Server ──────────────────────────────────────────
+async function verifyPayment(paymentId, orderId, signature) {
+  const btn = document.getElementById('payBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying payment...';
+  try {
+    const res = await apiFetch('/api/recharge', {
+      method: 'POST',
+      body: JSON.stringify({
+        packId: selectedPackId,
+        paymentMethod: 'razorpay',
+        razorpayPaymentId: paymentId,
+        razorpayOrderId: orderId,
+        razorpaySignature: signature
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      onPaymentSuccess(data);
+    } else {
+      showToast(data.error || 'Payment verification failed', 'error');
+      btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely via Razorpay';
+      btn.disabled = false;
+    }
+  } catch(e) {
+    showToast('Server error: ' + e.message, 'error');
+    btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely via Razorpay';
+    btn.disabled = false;
+  }
+}
+
+// ── Demo payment (when Razorpay keys not configured) ─────────────────────
+async function completeDemoPayment(order) {
+  const btn = document.getElementById('payBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing demo payment...';
+  await new Promise(r => setTimeout(r, 1200));
+
+  const res = await apiFetch('/api/recharge', {
+    method: 'POST',
+    body: JSON.stringify({ packId: selectedPackId, paymentMethod: 'demo' })
   });
-  const colors = {upi:'var(--wa-green)',card:'var(--info)',netbanking:'var(--primary)',emi:'var(--danger)'};
-  const bgs = {upi:'rgba(37,211,102,0.1)',card:'rgba(9,132,227,0.1)',netbanking:'rgba(108,92,231,0.1)',emi:'rgba(231,76,60,0.1)'};
-  const col = colors[id]; const bg = bgs[id];
-  el.style.borderColor = col;
-  el.style.background = bg;
-  el.querySelector('.pay-radio-dot').style.borderColor = col;
-  el.querySelector('.pay-radio-dot').innerHTML = \`<div style="width:8px;height:8px;border-radius:50%;background:\${col}"></div>\`;
+  const data = await res.json();
+  if (data.success) {
+    onPaymentSuccess(data);
+  } else {
+    showToast(data.error || 'Demo payment failed', 'error');
+    btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely via Razorpay';
+    btn.disabled = false;
+  }
 }
-function calcCustomCredits() {
-  const amt = parseFloat(document.getElementById('customAmount').value) || 0;
-  const credits = Math.floor(amt / 0.10);
-  document.getElementById('customCreditsOut').textContent = credits > 0 ? credits.toLocaleString('en-IN') : '—';
+
+// ── On Payment Success ──────────────────────────────────────────────────
+function onPaymentSuccess(data) {
+  document.getElementById('successCard').style.display = 'block';
+  document.getElementById('successCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('successMsg').textContent = data.credits.toLocaleString('en-IN') + ' credits added · Tx: ' + data.transactionId;
+  document.getElementById('newBalance').textContent = (data.newBalance || 0).toLocaleString('en-IN') + ' Credits';
+  document.getElementById('sidebarCredits').textContent = formatNum(data.newBalance || 0);
+  showToast('✅ ' + data.credits.toLocaleString('en-IN') + ' credits added!', 'success');
+  // Reload transactions
+  loadTransactions();
+  loadStats();
 }
-function processPayment() {
-  if (!selectedPack) { showToast('Please select a pack first','error'); return; }
-  showToast('Redirecting to payment gateway...', 'info');
-  setTimeout(() => showToast('Payment successful! Credits added to your wallet.', 'success'), 2000);
+
+// ── Load Transactions (Real from DB) ───────────────────────────────────
+async function loadTransactions() {
+  try {
+    const txns = await (await apiFetch('/api/transactions?limit=25')).json();
+    if (!txns || txns.length === 0) {
+      document.getElementById('txnBody').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text-muted)">No transactions yet</td></tr>';
+      return;
+    }
+    document.getElementById('txnBody').innerHTML = txns.map(t => {
+      const isRecharge = t.type === 'recharge' || t.type === 'bonus';
+      const credStr = (t.credits > 0 ? '+' : '') + (t.credits || 0).toLocaleString('en-IN');
+      const amtStr = t.amount ? '₹' + Math.abs(t.amount).toLocaleString('en-IN') : '₹0';
+      const date = new Date(t.created_at).toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'});
+      return \`
+        <tr>
+          <td style="font-size:12px;color:var(--text-muted);white-space:nowrap">\${date}</td>
+          <td style="font-size:13px;font-weight:600;color:white">\${t.description || t.type}</td>
+          <td><span class="badge \${isRecharge?'badge-success':'badge-warning'}" style="font-size:10px;text-transform:capitalize">\${t.type}</span></td>
+          <td style="font-size:13px;font-weight:700;color:\${t.credits>0?'var(--wa-green)':'var(--danger)'}">\${credStr}</td>
+          <td style="font-size:13px;font-weight:600;color:white">\${amtStr}</td>
+          <td style="font-size:12px;color:var(--text-muted)">\${t.payment_method || '—'}</td>
+          <td><span class="badge \${t.status==='success'?'badge-success':'badge-warning'}" style="font-size:10px">\${t.status}</span></td>
+          <td>
+            \${t.type==='recharge'?'<button class="btn btn-xs btn-outline" onclick="viewInvoice('+t.id+')"><i class="fas fa-file-pdf"></i> Invoice</button>':'<span style="color:var(--text-muted);font-size:12px">—</span>'}
+          </td>
+        </tr>
+      \`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('txnBody').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--danger)">Failed to load transactions</td></tr>';
+  }
 }
+
+async function viewInvoice(txnId) {
+  try {
+    const inv = await (await apiFetch('/api/invoices/'+txnId)).json();
+    showToast('Invoice #' + inv.invoiceNumber + ' — ₹' + inv.total + ' (incl. GST)', 'info');
+  } catch(e) {}
+}
+
+function exportTxns() {
+  window.location.href = '/api/contacts/export';
+  showToast('Downloading transaction CSV...', 'info');
+}
+
 function toggleAutoRecharge() {
   const t = document.getElementById('autoRechargeToggle');
+  const lbl = document.getElementById('autoRechargeLbl');
   const isOn = t.classList.contains('on');
   t.classList.toggle('on');
   t.style.background = isOn ? 'var(--border)' : 'var(--wa-green)';
+  lbl.textContent = isOn ? 'Disabled' : 'Enabled';
   const dot = t.querySelector('div');
-  if (isOn) { dot.style.left = '2px'; dot.style.right = ''; } else { dot.style.right = '2px'; dot.style.left = ''; }
+  if (isOn) { dot.style.left = '2px'; dot.style.right = 'auto'; }
+  else { dot.style.right = '2px'; dot.style.left = 'auto'; }
   showToast('Auto-recharge ' + (isOn ? 'disabled' : 'enabled'), isOn ? 'error' : 'success');
 }
-function copyText(t) { navigator.clipboard.writeText(t).then(() => showToast('Copied!', 'success')); }
+
+// ── Init ───────────────────────────────────────────────────────────────
+loadStats();
+loadPacks();
+loadTransactions();
+// Select popular pack (50K) after packs load
+setTimeout(() => {
+  const cards = document.querySelectorAll('.pack-card');
+  if (cards.length >= 3) cards[2].click();
+}, 500);
 `)
